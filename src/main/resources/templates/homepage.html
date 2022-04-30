@@ -1,0 +1,135 @@
+<!DOCTYPE html>
+<html lang="en" xmlns:th="http://www.w3.org/1999/xhtml">
+<head>
+  <title>歡迎光臨My書</title>
+  <meta charset="UTF-8">
+  <meta http-equiv="X-UA-Compatible" content="IE=edge ,chrome=1 ">
+  <meta name="viewport" content="width=device-width, initial-scale=1">
+  <link rel="stylesheet"  th:href="@{/css/bootstrap.min.css}" href="../static/css/bootstrap.min.css">
+  <script src="http://ajax.googleapis,com/ajax/libs/jquery/1.12.4/jquery.min.js"></script>
+  <script th:src="@{/js/bootstrap.min.js}"src="../static/js/bootstrap.min.js"></script>
+  <style>
+  	<!--html,body{height:100%;margin:5px;padding:5px}
+  	#page{
+  		width:100%;height:100%;display:flex;flex-direction:column;
+  	}-->
+  	
+  	#header{
+  		width:900px;height:80px;margin:0px auto
+  	}
+  	#content{
+  		width:900px;height:1400px;margin:0px auto
+  	}
+  	#footer{
+  		width:900px;height:80px;margin:0px auto
+  	}
+  	
+  </style>
+  <script th:inline="javascript">
+  	var message = [[${message}]];	
+    	if(message!=null){
+    	window.alert(message);
+    }
+  </script>
+</head>
+
+<body id="page" th:object="${session.member}" >
+  <header id="header" class="fluid-container">
+    <div class="row">
+      <div class="col-lg-7 col-md-4 col-sm-6 col-xs-3" style="font-size:50px;font-weight:bolder">My書</div>
+      <div class="col-lg-5 col-md-8 col-sm-6 col-xs-9">
+        <ul>
+          <li style="display:inline;margin-right:10px" th:unless="${session.member!=null}"><a th:href="@{/member/login}" >登入</a></li>
+          <li style="display:inline;margin-right:10px" th:if="${session.member!=null}" th:text="'Hi,'+${session.member.name}+',歡迎光臨'"></li>
+          <li style="display:inline;margin-right:10px" th:unless="${session.member!=null}"><a th:href="@{/member/join}">加入會員</a></li>
+          <li style="display:inline;margin-right:in-right:10px"><a th:href="@{/getcart}">購物車</a></li>
+          <li style="display:inline;margin-right:10px" th:if="${session.member!=null}"><a th:href="@{/member/myaccount/index}">會員專區</a></li>
+          <li style="display:inline;margin-right:10px" th:if="${session.member!=null}" ><a th:href="@{/member/logout}">登出</a></li>
+        </ul>
+      </div>
+    </div>
+  </header>
+  <div id="content" class="fluid-container">
+    <div style="float:left;width:18%;height:1400px;">
+      <div style="width:150px;height:300px;border-style:double;border-color:green;position:fixed;margin-top:70px">
+        <h3 class="page-header" style="margin:10px;text-align:center">全站分類</h3>       
+          <ul style="font-size:medium;">
+            <li><a th:href="@{/booklist/{menu}(menu='1')}">商業理財</a></li>
+            <li style="padding-top:5px"><a th:href="@{/booklist/{menu}(menu='2')}">考試用書</a></li>
+            <li style="padding-top:5px" value="藝術設計"><a th:href="@{/booklist/{menu}(menu='3')}">藝術設計</a></li>
+            <li style="padding-top:5px" value="心理勵志"><a th:href="@{/booklist/{menu}(menu='4')}">心理勵志</a></li>
+            <li style="padding-top:5px" value="文學小說"><a th:href="@{/booklist/{menu}(menu='5')}">文學小說</a></li>
+            <li style="padding-top:5px" value="考試用書"><a th:href="@{/booklist/{menu}(menu='6')}">親子教養</a></li>
+            <li style="padding-top:5px" value="考試用書"><a th:href="@{/booklist/{menu}(menu='7')}">醫療保健</a></li>
+            <li style="padding-top:5px" value="考試用書"><a th:href="@{/booklist/{menu}(menu='8')}">旅遊飲食</a></li>
+          </ul>
+      </div>
+    </div>
+    <div style="float:right;width:82%;height:1400px">
+      <h2>新書到館</h2>
+      <table class="table table-bordered table-striped table-hover" style="text-align:center;text-align:left;" >
+      <tbody>
+        <tr th:each="book,iterStat:${newbooks}" >
+          <td th:text="${iterStat.count}" style="width:10px"></td>
+          <td style="width:100px;vertical-align:middle;">
+            <a th:href="@{/book/{id}(id=${book.id})}"><img th:src="'/picture/'+${book.image}" style="width:70px;height:70px"></a>
+          </td>
+          <td style="width:300px">
+            <h4><a th:href="@{/book/{id}(id=${book.id})}" th:text="'《'+${book.name}+'》'"></a></h4>
+            <span th:text="'作者: '+${book.author}"></span><br>
+            <span th:text="'優惠價: '+${#numbers.formatDecimal(book.price*book.discount, 0, 0)}+'元'"></span><br>
+            <span th:text="'出版日: '+${book.publishdate}"></span>
+          </td>
+          <td><span th:text="${book.simpleintro}"></span><span><a th:text="...more" th:href="@{/book/{id}(id=${book.id})}"></a></span></td>
+        </tr>
+      </tbody>
+    </table> 
+    <h2>熱銷TOP5</h2>
+      <table class="table table-bordered table-striped table-hover" style="text-align:center;text-align:left;" >
+      <tbody>
+        <tr th:each="book,iterStat:${top10}" >
+          <td th:text="${iterStat.count}" style="width:10px"></td>
+          <td style="width:100px">
+            <a th:href="@{/book/{id}(id=${book.id})}"><img th:src="'/picture/'+${book.image}" style="width:70px;height:70px"></a>
+          </td>
+          <td style="width:300px">
+            <h4><a th:href="@{/book/{id}(id=${book.id})}" th:text="'《'+${book.name}+'》'"></a></h4>
+            <span th:text="'作者: '+${book.author}"></span><br>
+            <span th:text="'優惠價: '+${#numbers.formatDecimal(book.price*book.discount, 0, 0)}+'元'"></span><br>
+            <span th:text="'出版日: '+${book.publishdate}"></span>
+          </td>
+          <td><span th:text="${book.simpleintro}"></span><span><a th:text="...more" th:href="@{/book/{id}(id=${book.id})}"></a></span></td>
+        </tr>
+      </tbody>
+    </table> 
+    </div>  
+  </div>
+  <footer id="footer">
+    <div style="width:18%;height:100%;float:left;">
+      <ul style="list-style-type:none;">
+        <li><a th:href="@{/about}">關於My書</a></li>
+        <li><a th:href="@{/privacyAndService}">隱私權&amp;服務條款</a></li>
+        <li><a th:href="@{/guide}">新手上路</a></li>
+        <li><a th:href="@{/Q&A}">Q&amp;A</a></li>
+        <li><a th:href="@{/Facebook}">Facebook</a></li>
+      </ul>
+    </div>
+    <div style="width:82%;height:100%;float:right;text-align:center;">
+      <ul style="list-style-type:none;">
+        <li style="display:inline;">客服專線: 02-123456789</li>
+        <li style="display:inline;">傳真: 02-987654321</li>
+        <li style="display:inline;">客服信箱: 123456789@gmail.com</li>
+      </ul>
+      <ul style="list-style-type:none;">
+        <li style="display:inline;">服務時間：週一~五 8:00~19:00，週六~日、例假日 9:00~18:00，365天全年無休</li>
+      </ul>
+       <ul style="list-style-type:none;">
+        <li style="display:inline;">麥書文化股份有限公司</li>
+        <li style="display:inline;">地址: 苗栗縣苗栗市為公路747號</li>
+      </ul>
+    </div>
+  </footer>
+    
+</body>
+
+</html>

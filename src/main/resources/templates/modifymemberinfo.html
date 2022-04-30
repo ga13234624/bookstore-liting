@@ -1,0 +1,75 @@
+<!DOCTYPE html>
+<html lang="en" xmlns:th="http://www.w3.org/1999/xhtml">
+<head>
+  <title>會員資料修改</title>
+  <meta charset="UTF-8">
+  <meta http-equiv="X-UA-Compatible" content="IE=edge ,chrome=1 ">
+  <meta name="viewport" content="width=device-width, initial-scale=1">
+  <link rel="stylesheet"  th:href="@{/css/bootstrap.min.css}" href="../static/css/bootstrap.min.css">
+  <script src="http://ajax.googleapis,com/ajax/libs/jquery/1.12.4/jquery.min.js"></script>
+  <script th:src="@{/js/bootstrap.min.js}"src="../static/js/bootstrap.min.js"></script>
+  <style>
+  	<--html,body{height:100%;margin:5px;padding:5px;}
+  	#page{
+  		width:100%;height:100%;display:flex;flex-direction:column;
+  	} -->
+  	
+  	#header{
+  		top:0;width:100%;height:10%;text-align:center;font-size:xxx-large;margin-bottom:10px;
+  	}
+  	#content{
+  		width:100%;height:100%;top:50px;margin-button:10px;
+  	}
+  	#footer{
+  		top:10%;width:100%;height:50px;
+  	}
+  </style>
+  <script th:inline="javascript">
+  	var message = [[${message}]];	
+    	if(message!=null){
+    	window.alert(message);
+    }
+  </script>
+</head>
+
+<body id="page">
+  <header id="header"><a th:href="@{/homepage}">My書</a></header>
+  <div id="content" class="container" style="max-width:40%; margin-top:0;">
+    <div style="text-align:center;"><h1 class="page-header">會員資料修改</h1></div>
+    <p style="text-align:right">
+      <a th:href="@{/member/myaccount/index}" class="btn btn-default">會員專區</a>
+    </p>
+    <div class="well">
+      <form  th:action="@{/member/myaccount/modifyMemberinfo}" method="post" th:object="${modifyForm}">
+      	<div class="form-group">
+    	  <label for="emailId">信箱</label>
+    	  <input type="text" id="emailId" class="form-control" th:value="${session.member.email}" readonly="readonly">
+    	</div>
+    	<div class="form-group">
+    	  <label for="birthdayId">生日</label><input type="date" id="birthdayId" class="form-control" th:value="${session.member.birthday}" readonly="readonly">
+    	</div>
+      	<div class="form-group">
+    	  <label for="nameId">姓名</label><input type="text" id="nameId" name="name" class="form-control"required th:value="${session.member.name}" >
+    	  <p class="form-control-static text-danger" th:if="${#fields.hasErrors('name')}" th:errors="*{name}"></p>
+    	</div>
+    	<div class="form-group">
+    	  <label for="mobileId">手機</label><input type="text" id="mobileId" name="mobile" class="form-control" th:value="${session.member.mobile}">
+		  <p class="form-control-static text-danger" th:if="${#fields.hasErrors('mobile')}" th:errors="*{mobile}"></p>
+    	</div>
+    	<div class="form-group">
+    	  <label for="locationId">住址</label><input type="text" id="locationId" name="location" class="form-control" th:value="${session.member.location}">
+    	  <p class="form-control-static text-danger" th:if="${#fields.hasErrors('location')}" th:errors="*{location}"></p>
+    	</div>
+    	<div class="form-group">
+    	  <label for="passwordId">輸入密碼*</label><input type="password" id="passwordId" name="password" class="form-control">
+    	</div>
+    	<p style="text-align:center">
+    	  <button type="submit" class="btn btn-default">送出</button>
+    	</p>
+        </form>
+    	
+    </div>
+  </div>
+  <footer id="footer"></footer>
+</body>
+</html>

@@ -1,0 +1,83 @@
+<!DOCTYPE html>
+<html lang="en" xmlns:th="http://www.w3.org/1999/xhtml">
+<head>
+  <title>歷史訂單查詢</title>
+  <meta charset="UTF-8">
+  <meta http-equiv="X-UA-Compatible" content="IE=edge ,chrome=1 ">
+  <meta name="viewport" content="width=device-width, initial-scale=1">
+  <link rel="stylesheet"  th:href="@{/css/bootstrap.min.css}" href="../static/css/bootstrap.min.css">
+  <script src="http://ajax.googleapis,com/ajax/libs/jquery/1.12.4/jquery.min.js"></script>
+  <script th:src="@{/js/bootstrap.min.js}"src="../static/js/bootstrap.min.js"></script>
+   <style>
+  	<--html,body{height:100%;margin:5px;padding:5px;}
+  	#page{
+  		width:100%;height:100%;display:flex;flex-direction:column;
+  	} -->
+  	
+  	#header{
+  		top:0;width:100%;height:10%;text-align:center;font-size:xxx-large;margin-bottom:10px;
+  	}
+  	#content{
+  		width:100%;height:100%;top:50px;margin-button:10px;
+  	}
+  	#footer{
+  		top:10%;width:100%;height:50px;
+  	}
+  </style>
+  <script type="text/javascript">
+    function goPage(period){
+    	window.location.href="?period="+period;
+    }
+  </script>
+</head>
+
+<body id="page">
+  <header id="header"><a th:href="@{/homepage}">My書</a></header>
+  <div id="content" class="container" style="max-width:60%; margin-top:0;">
+    <div style="text-align:center;"><h1 class="page-header">歷史訂單</h1></div>
+    <div style="diaplay:inline;float:left">
+      <select name="period" th:onChange="goPage(this.value)">
+        <option value="0" th:selected="(${period}=='')">所有訂單</option>
+        <option value="1" th:selected="(${period}=='1')">近1個月</option>
+        <option value="3" th:selected="(${period}=='3')">近3個月</option>
+        <option value="6" th:selected="(${period}=='6')">近6個月</option>        
+      </select>
+    </div>
+    <p style="text-align:right;display:inline;float:right">
+      <a th:href="@{/member/myaccount/index}" class="btn btn-default">會員專區</a>
+    </p>
+    <table class="table table-bordered table-striped table-hover" style="text-align:center;">
+      <thead>
+        <tr>
+          <td>時間</td>
+          <td>金額</td>
+          <td>項目</td>
+          <td>處理狀態</td>
+        </tr>
+      </thead>
+      <tbody>
+        <tr th:each="order:${page1.content}">
+          <td th:text="${order.datetime}"></td>
+          <td th:text="${order.total}"></td>
+          <td style="text-align:left;">
+            <span th:each="cartitem:${order.cartitems}">
+              <span><a th:text="${cartitem.book.name}" th:href="@{/book/{id}(id=${cartitem.book.id})}"></a></span>
+              <span th:text="'  '+${cartitem.quantity}+'本'"></span><br>
+            </span>
+          </td>
+          <td>處理中</td>
+        </tr>
+      </tbody>
+    </table>
+    <nav>
+      <ul class="pager">
+        <li class="previous"><a th:href="@{/member/myaccount/getorder(period=(${period}),page=(${page1.number}-1))}" th:unless="${page1.first}">上一頁</a></li>
+        <li class="next"><a th:href="@{/member/myaccount/getorder(period=(${period}),page=(${page1.number}+1))}"  th:unless="${page1.last}">下一頁</a></li>
+      </ul>
+    </nav>
+  </div>
+  
+  
+  <footer id="footer"></footer>
+</body>
+</html>

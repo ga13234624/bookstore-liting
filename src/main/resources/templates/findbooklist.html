@@ -1,0 +1,75 @@
+<!DOCTYPE html>
+<html lang="en" xmlns:th="http://www.w3.org/1999/xhtml">
+<head>
+  <title th:text="'My書>'+${type}"></title>
+  <meta charset="UTF-8">
+  <meta http-equiv="X-UA-Compatible" content="IE=edge ,chrome=1 ">
+  <meta name="viewport" content="width=device-width, initial-scale=1">
+  <link rel="stylesheet"  th:href="@{/css/bootstrap.min.css}" href="../static/css/bootstrap.min.css">
+  <script src="http://ajax.googleapis,com/ajax/libs/jquery/1.12.4/jquery.min.js"></script>
+  <script th:src="@{/js/bootstrap.min.js}"src="../static/js/bootstrap.min.js"></script>
+   <style>
+  	<--html,body{height:100%;margin:5px;padding:5px;}
+  	#page{
+  		width:100%;height:100%;display:flex;flex-direction:column;
+  	} -->
+  	
+  	#header{
+  		top:0;width:100%;height:10%;text-align:center;font-size:xxx-large;margin-bottom:10px;
+  	}
+  	#content{
+  		width:100%;height:100%;top:50px;margin-button:10px;
+  	}
+  	#footer{
+  		top:10%;width:100%;height:50px;
+  	}
+  </style>
+  <script type="text/javascript">
+    function goPage(name){
+    	window.location.href="?sortby="+name;
+    }
+  </script>
+</head>
+
+<body id="page">
+  <header id="header"><a th:href="@{/homepage}">My書</a></header>
+  <div id="content" class="container" style="max-width:700px; margin-top:0;">
+    <h1 style="display:inline" th:text="${type}"></h1>
+    <div class="text-right">
+      <select name="sort" th:onChange="goPage(this.value)">
+        <option value="1" th:selected="(${sortby}=='1')">出版日期(新→舊)</option>
+        <option value="2" th:selected="(${sortby}=='2')">出版日期(舊→新)</option>
+        <option value="3" th:selected="(${sortby}=='3')">定價(高→低)</option>
+        <option value="4" th:selected="(${sortby}=='4')">定價(低→高)</option>
+        <option value="5" th:selected="(${sortby}=='5')">暢銷度</option>
+      </select>
+    </div>
+    <table class="table table-bordered table-striped table-hover" style="text-align:center;vertical-align:middle; margin-top:10px" >
+      <tbody>
+        <tr th:each="book:${page1.content}" style="text-align:left;" >
+          <td style="width:100px;vertical-align:middle;">
+            <a th:href="@{/book/{id}(id=${book.id})}"><img th:src="'/picture/'+${book.image}" style="width:70px;height:70px"></a>
+          </td>
+          <td style="width:300px">
+            <h4><a th:href="@{/book/{id}(id=${book.id})}" th:text="'《'+${book.name}+'》'"></a></h4>
+            <span th:text="'作者: '+${book.author}"></span><br>
+            <span th:text="'定價:'+${book.price}+' 優惠價: '+${#numbers.formatDecimal(book.price*book.discount, 0, 0)}+'元'"></span><br>
+            <span th:text="'出版日: '+${book.publishdate}"></span>
+          </td>
+          <td><span th:text="${book.simpleintro}"></span><span><a th:text="...more" th:href="@{/book/{id}(id=${book.id})}"></a></span></td>
+        </tr>
+      </tbody>
+    </table>
+    <nav>
+      <ul class="pager">
+        <li class="previous"><a th:href="@{/booklist/{menu}(menu=${menu},page=(${page1.number}-1))}" th:unless="${page1.first}">上一頁</a></li>
+        <li><label th:text="'第'+${page1.number+1}+'頁，共'+${page1.totalPages}+'頁'"></label></li>
+        <li class="next"><a th:href="@{/booklist/{menu}(menu=${menu},page=(${page1.number}+1))}"  th:unless="${page1.last}">下一頁</a></li>
+      </ul>
+    </nav>
+  </div>
+  
+  
+  <footer id="footer"></footer>
+</body>
+</html>

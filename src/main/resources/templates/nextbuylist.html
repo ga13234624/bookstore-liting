@@ -1,0 +1,68 @@
+<!DOCTYPE html>
+<html lang="en" xmlns:th="http://www.w3.org/1999/xhtml">
+<head>
+  <title>下次再買清單</title>
+  <meta charset="UTF-8">
+  <meta http-equiv="X-UA-Compatible" content="IE=edge ,chrome=1 ">
+  <meta name="viewport" content="width=device-width, initial-scale=1">
+  <link rel="stylesheet"  th:href="@{/css/bootstrap.min.css}" href="../static/css/bootstrap.min.css">
+  <script src="http://ajax.googleapis,com/ajax/libs/jquery/1.12.4/jquery.min.js"></script>
+  <script th:src="@{/js/bootstrap.min.js}"src="../static/js/bootstrap.min.js"></script>
+   <style>
+  	<--html,body{height:100%;margin:5px;padding:5px;}
+  	#page{
+  		width:100%;height:100%;display:flex;flex-direction:column;
+  	} -->
+  	
+  	#header{
+  		top:0;width:100%;height:10%;text-align:center;font-size:xxx-large;margin-bottom:10px;
+  	}
+  	#content{
+  		width:1000px;height:100%;top:50px;margin-button:10px;
+  	}
+  	#footer{
+  		top:10%;width:100%;height:50px;
+  	}
+  </style>
+</head>
+
+<body id="page">
+  <header id="header"><a th:href="@{/homepage}">My書</a></header>
+  <div id="content" class="container" style="max-width:1300px; margin-top:0;">
+    <div style="text-align:center;"><h1 class="page-header">下次再買</h1></div>
+    <p style="text-align:right">
+      <a th:href="@{/getcart}" class="btn btn-default">前往購物車</a> 
+      <a th:href="@{/member/myaccount/index}" class="btn btn-default">會員專區</a>
+    </p>
+    <table class="table table-bordered table-striped table-hover" style="text-align:center;vertical-align:middle;" >
+      <thead>
+        <tr>
+          <td style="width:600px">書名</td>
+          <td style="width:100px">優惠價</td>
+          <td style="width:100px">數量</td>
+          <td style="width:100px">小計</td>
+          <td style="width:100px">庫存</td>
+          <td style="width:300px">操作</td>
+        </tr>
+      </thead>
+      <tbody>
+        <tr th:each="cartitem:${nextbuy}">
+          <td style="text-align:left;">
+            <a th:href=@{/book/{id}(id=${cartitem.book.id})}>
+            <img th:src="'/picture/'+${cartitem.book.image}" style="width:70px;height:70px">
+            <span th:text="${cartitem.book.name}"></span></a></td>
+          <td><span id="priceid" th:text="${cartitem.price}">單價</span></td>
+          <td th:text="${cartitem.quantity}"></td>
+          <td th:text="${cartitem.subtotal}"></td>
+          <td th:text="${cartitem.book.amount}"></td>
+          <td>
+            <a th:href="@{/changeNextbuy/{cartitemid}(cartitemid=${cartitem.id})}"><button>加到購物車</button></a>
+            <a th:href="@{/delete/cartitem/{cartitemid}(cartitemid=${cartitem.id})}"><button>刪除</button></a>
+          </td>
+        </tr>
+      </tbody>
+    </table>
+  </div>
+  <footer id="footer"></footer>
+</body>
+</html>

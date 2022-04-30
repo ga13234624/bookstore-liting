@@ -1,0 +1,72 @@
+<!DOCTYPE html>
+<html lang="en" xmlns:th="http://www.w3.org/1999/xhtml">
+<head>
+  <title>收件資料</title>
+  <meta charset="UTF-8">
+  <meta http-equiv="X-UA-Compatible" content="IE=edge ,chrome=1 ">
+  <meta name="viewport" content="width=device-width, initial-scale=1">
+  <link rel="stylesheet"  th:href="@{/css/bootstrap.min.css}" href="../static/css/bootstrap.min.css">
+  <script src="http://ajax.googleapis,com/ajax/libs/jquery/1.12.4/jquery.min.js"></script>
+  <script th:src="@{/js/bootstrap.min.js}"src="../static/js/bootstrap.min.js"></script>
+  <style>
+  	<--html,body{height:100%;margin:5px;padding:5px;}
+  	#page{
+  		width:100%;height:100%;display:flex;flex-direction:column;
+  	} -->
+  	
+  	#header{
+  		top:0;width:100%;height:10%;text-align:center;font-size:xxx-large;margin-bottom:10px;
+  	}
+  	#content{
+  		width:100%;height:100%;top:50px;margin-button:10px;
+  	}
+  	#footer{
+  		top:10%;width:100%;height:50px;
+  	}
+  </style>
+  <script th:inline="javascript">
+  	var message = [[${message}]];	
+    	if(message!=null){
+    	window.alert(message);
+    }
+  </script>
+</head>
+
+<body id="page">
+  <header id="header"><a th:href="@{/homepage}">My書</a></header>
+  <div id="content" class="container" style="max-width:40%; margin-top:0;" th:object="${receiverForm}">
+    <div style="text-align:center"><h1 class="page-header">收件者資料</h1></div>
+    <div class="well">
+      <form th:action="@{/order/confirm}" method="post">
+      	<div class="form-group">
+    	  <label for="nameId">姓名*</label><input type="text" id="nameId" name="receivername" class="form-control"required th:value="${session.member.name}" >
+    	  <p class="form-control-static text-danger" th:if="${#fields.hasErrors('receivername')}" th:errors="*{receivername}"></p>
+    	</div>
+    	<div class="form-group">
+    	  <label for="mobileId">電話*</label><input type="text" id="mobileId" name="receiverphone" class="form-control" required th:value="${session.member.mobile}">
+    	  <p class="form-control-static text-danger" th:if="${#fields.hasErrors('receiverphone')}" th:errors="*{receiverphone}"></p>
+    	</div>
+    	<div class="form-group">
+    	  <label for="locationId">地址*</label><input type="text" id="locationId" name="receiveraddress" class="form-control" required th:value="${session.member.location}">
+    	  <p class="form-control-static text-danger" th:if="${#fields.hasErrors('receiveraddress')}" th:errors="*{receiveraddress}"></p>
+    	</div>
+    	<div class="form-group" style="text-align:center">
+    	  <p>目前有 <span th:text="${session.member.shoppingMoney}"></span> My幣</p>
+    	  <p>使用<input name="offset" type="number" th:value="0" min="0" max="500" style="border:0 none;cursor:pointer;-webkit-border-radius: 5px;border-radius: 5px;width:50px" required>My幣</p>
+    	  <p>(單筆最高可使用500 My幣)</p>
+    	  <p class="form-control-static text-danger" th:if="${#fields.hasErrors('offset')}" th:errors="*{offset}" ></p>
+    	</div>
+    	<div class="form-group">
+    	  <p style="text-align:center">
+    	    <a href="javascript:history.go(-1)" class="btn btn-default">上一步</a>
+    	    <button type="submit" class="btn btn-default">下一步</button>
+    	  </p>
+    	</div>
+        </form>
+    </div>
+  </div>
+  
+  
+  <footer id="footer"></footer>
+</body>
+</html>

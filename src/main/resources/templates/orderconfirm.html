@@ -1,0 +1,73 @@
+<!DOCTYPE html>
+<html lang="en" xmlns:th="http://www.w3.org/1999/xhtml">
+<head>
+  <title th:text="結帳頁面"></title>
+  <meta charset="UTF-8">
+  <meta http-equiv="X-UA-Compatible" content="IE=edge ,chrome=1 ">
+  <meta name="viewport" content="width=device-width, initial-scale=1">
+  <link rel="stylesheet"  th:href="@{/css/bootstrap.min.css}" href="../static/css/bootstrap.min.css">
+  <script src="http://ajax.googleapis,com/ajax/libs/jquery/1.12.4/jquery.min.js"></script>
+  <script th:src="@{/js/bootstrap.min.js}"src="../static/js/bootstrap.min.js"></script>
+   <style>
+  	<--html,body{height:100%;margin:5px;padding:5px;}
+  	#page{
+  		width:100%;height:100%;display:flex;flex-direction:column;
+  	} -->
+  	
+  	#header{
+  		top:0;width:100%;height:10%;text-align:center;font-size:xxx-large;margin-bottom:10px;
+  	}
+  	#content{
+  		width:100%;height:100%;top:50px;margin-button:10px;
+  	}
+  	#footer{
+  		top:10%;width:100%;height:50px;
+  	}
+  </style>
+<body id="page">
+  <header id="header"><a th:href="@{/homepage}">My書</a></header>
+  <div id="content" class="container" style="max-width:700px; margin-top:0;">
+    <div style="text-align:center"><h1 class="page-header">訂單確認</h1></div>
+    <table class="table table-bordered table-striped table-hover" style="text-align:center;vertical-align:middle;" >
+      <thead>
+        <tr>
+          <td style="width:400px">項目</td>
+          <td style="width:100px">優惠價</td>
+          <td style="width:100px">數量</td>
+          <td style="width:100px">小計</td>
+        </tr>
+      </thead>
+      <tbody>
+        <tr th:each="cartitem:${session.cartitems}">
+          <td style="text-align:left;" th:text="${cartitem.book.name}"></td>
+          <td th:text="${cartitem.price}"></td>
+          <td th:text="${cartitem.quantity}"></td>
+          <td th:text="${cartitem.subtotal}"></td>
+        </tr>
+        <tr th:if="${session.cartsum<1060}" >
+          <td colspan="3" style="text-align:left;" th:text="'運費(滿1000免運)'"></td>
+          <td th:text="'60'"></td></tr>
+        <tr th:if="${session.receiverinfo[3]!=0}" >
+          <td colspan="3" style="text-align:left;" th:text="'My幣折抵'"></td>
+          <td th:text="'-'+${session.receiverinfo[3]}"></td></tr>
+      </tbody>
+    </table>
+    <div style="display:inline;">
+      <div class="well" style="float:left;font-size:15px;width:200px;margin:0 auto">
+        <span><strong>收件者: </strong></span><span th:text="${session.receiverinfo[0]}"></span><br>
+        <span><strong>電話: </strong></span><span th:text="${session.receiverinfo[1]}"></span><br>
+        <span><strong>地址: </strong></span><span th:text="${session.receiverinfo[2]}"></span>
+      </div>
+      <div style="font-size:25px;float:right;">
+        <label>總金額: </label><label th:text="${session.cartsum}+'元'">3000</label>
+        <span style="font-size:10px" th:text="'(可獲得'+${session.shoppingmoney}+' My幣)'"></span><br>
+        <a href="javascript:history.go(-1)" class="btn btn-default">上一步</a>
+        <a th:href="@{/order/sendorder}" class="btn btn-default">訂單送出</a>
+      </div>
+    </div>
+  </div>
+  
+  
+  <footer id="footer"></footer>
+</body>
+</html>

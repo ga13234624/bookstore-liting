@@ -1,0 +1,61 @@
+<!DOCTYPE html>
+<html lang="en" xmlns:th="http://www.w3.org/1999/xhtml">
+<head>
+  <title>可訂購通知我</title>
+  <meta charset="UTF-8">
+  <meta http-equiv="X-UA-Compatible" content="IE=edge ,chrome=1 ">
+  <meta name="viewport" content="width=device-width, initial-scale=1">
+  <link rel="stylesheet"  th:href="@{/css/bootstrap.min.css}" href="../static/css/bootstrap.min.css">
+  <script src="http://ajax.googleapis,com/ajax/libs/jquery/1.12.4/jquery.min.js"></script>
+  <script th:src="@{/js/bootstrap.min.js}"src="../static/js/bootstrap.min.js"></script>
+   <style>
+  	<--html,body{height:100%;margin:5px;padding:5px;}
+  	#page{
+  		width:100%;height:100%;display:flex;flex-direction:column;
+  	} -->
+  	
+  	#header{
+  		top:0;width:100%;height:10%;text-align:center;font-size:xxx-large;margin-bottom:10px;
+  	}
+  	#content{
+  		width:100%;height:100%;top:50px;margin-button:10px;
+  	}
+  	#footer{
+  		top:10%;width:100%;height:50px;
+  	}
+  </style>
+</head>
+
+<body id="page">
+  <header id="header"><a th:href="@{/homepage}">My書</a></header>
+  <div id="content" class="container" style="max-width:60%; margin-top:0;">
+    <div style="text-align:center;"><h1 class="page-header">可訂購通知我</h1></div>
+    <p style="text-align:right">
+      <a th:href="@{/member/myaccount/index}" class="btn btn-default">會員專區</a>
+    </p>
+    <table class="table table-bordered table-striped table-hover" style="text-align:center;">
+      <thead>
+        <tr>
+          <td>時間</td>
+          <td>項目</td>
+          <td>目前庫存</td>
+          <td>操作</td>
+        </tr>
+      </thead>
+      <tbody>
+        <tr th:each="reorder:${session.member.reorders}">
+          <td th:text="${reorder.datetime}"></td>
+          <td><a th:href="@{/book/{id}(id=${reorder.book.id})}" th:text="${reorder.book.name}"></a></td>
+          <td th:text="${reorder.book.amount}"></td>
+          <td>
+            <form method="post" th:action="@{/reorder/delete}">
+            <button type="submit" name="reorderID" th:value="${reorder.id}">刪除</button>
+            </form>
+          </td>
+        </tr>
+      </tbody>
+    </table>
+  </div>
+  <footer id="footer"></footer>
+</body>
+</html>

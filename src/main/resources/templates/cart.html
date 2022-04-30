@@ -1,0 +1,84 @@
+<!DOCTYPE html>
+<html lang="en" xmlns:th="http://www.w3.org/1999/xhtml">
+<head>
+  <title th:text="購物車明細"></title>
+  <meta charset="UTF-8">
+  <meta http-equiv="X-UA-Compatible" content="IE=edge ,chrome=1 ">
+  <meta name="viewport" content="width=device-width, initial-scale=1">
+  <link rel="stylesheet"  th:href="@{/css/bootstrap.min.css}" href="../static/css/bootstrap.min.css">
+  <script src="http://ajax.googleapis,com/ajax/libs/jquery/1.12.4/jquery.min.js"></script>
+  <script th:src="@{/js/bootstrap.min.js}"src="../static/js/bootstrap.min.js"></script>
+   <style>
+  	<--html,body{height:100%;margin:5px;padding:5px;}
+  	#page{
+  		width:100%;height:100%;display:flex;flex-direction:column;
+  	} -->
+  	
+  	#header{
+  		top:0;width:100%;height:10%;text-align:center;font-size:xxx-large;margin-bottom:10px;
+  	}
+  	#content{
+  		width:1000px;height:100%;top:50px;margin-button:10px;
+  	}
+  	#footer{
+  		top:10%;width:100%;height:50px;
+  	}
+  </style>
+</head>
+ <script th:inline="javascript">
+  	var message = [[${message}]];	
+    	if(message!=null){
+    	window.alert(message);
+    }
+  </script>
+<body id="page">
+  <header id="header"><a th:href="@{/homepage}">My書</a></header> 
+  <div id="content" class="container" style="max-width:1300px; margin-top:0;">
+    <div style="text-align:center;"><h1 class="page-header">我的購物車</h1></div>
+    <p style="text-align:right">
+      <a th:href="@{/member/myaccount/nextbuy}" class="btn btn-default">下次再買清單</a> 
+      <a th:href="@{/member/myaccount/index}" class="btn btn-default">會員專區</a>
+    </p>
+    <table class="table table-bordered table-striped table-hover" style="text-align:center;vertical-align:middle;" >
+      <thead>
+        <tr>
+          <td style="width:600px">書名</td>
+          <td style="width:100px">優惠價</td>
+          <td style="width:100px">數量</td>
+          <td style="width:100px">小計</td>
+          <td style="width:100px">庫存</td>
+          <td style="width:300px">操作</td>
+        </tr>
+      </thead>
+      <tbody>
+        <tr th:each="cartitem:${cartitems}">
+          <td style="text-align:left;">
+            <a th:href=@{/book/{id}(id=${cartitem.book.id})}>
+            <img th:src="'/picture/'+${cartitem.book.image}" style="width:70px;height:70px">
+            <span th:text="${cartitem.book.name}"></span></a></td>
+          <td><span id="priceid" th:text="${cartitem.price}">單價</span></td>
+          <td>
+            <form method="post" th:action="@{/changequantity}">
+			  <input name="quantity" type="number" min="0" style="width:50px" th:value="${cartitem.quantity}" onchange="this.form.submit()">
+              <input type="hidden" name="cartitemid" min="0" th:value="${cartitem.id}">
+            </form>
+          </td>
+          <td th:text="${cartitem.subtotal}"></td>
+          <td th:text="${cartitem.book.amount}"></td>
+          <td>
+            <a th:href="@{/changeNextbuy/{cartitemid}(cartitemid=${cartitem.id})}"><button>下次再買</button></a>
+            <a th:href="@{/delete/cartitem/{cartitemid}(cartitemid=${cartitem.id})}"><button>刪除</button></a>
+          </td>
+        </tr>
+      </tbody>
+    </table>
+    <div style="text-align:right;font-size:25px">
+      <label>總金額: </label><label th:text="${cartsum}+'元'">3000</label><span style="font-size:10px">(運費另計)</span>
+      <a th:href="@{order/addorderinfo}")><button class="btn btn-info" th:unless="${cartsum<=0}">結帳去→</button></a>
+    </div>
+  </div>
+  
+  
+  <footer id="footer"></footer>
+</body>
+</html>
